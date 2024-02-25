@@ -1,0 +1,136 @@
+*{
+    margin: 0;
+    padding: 0;
+}
+body{
+    width: 100%;
+    height: 100vh;
+    box-sizing: border-box;
+    background-color: rgb(17, 80, 38) ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family:Arial, Helvetica, sans-serif
+}
+
+.container{
+width: 100%;
+max-width: 700px;
+height: 80vh;
+background-color: rgb(157, 221, 191);
+border-radius: 10px;
+box-shadow: 0 0 10px  1px gray ;
+
+}
+.content{
+    position: relative;
+    height: 70vh;
+}
+.content .title{
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    border-bottom: 5px double black;
+}
+.content .input{
+    width: 100%;
+    height: 0;
+    position: absolute;
+    bottom:0;
+}
+.content input{
+    height: 30px;
+    width: 85%;
+    margin-left: 10px;
+    padding-left: 15px;
+    border-radius: 10px;
+}
+.input i{
+    font-size: 20px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+.message{
+    width: 100%;
+    height: 60vh;
+    overflow-y:auto ;
+}
+.message .outgoing{
+    display: flex;
+    justify-content: end;
+}
+.message .send-msg{
+    width: max-content;
+    max-width: 50%;
+    height: max-content;
+    margin: 20px 30px 20px 30px ;
+    /* margin-bottom: 30px; */
+    border-radius: 20px;
+    padding: 10px 25px;
+    background-color: rgb(32, 105, 189);
+    color: white;
+    overflow-wrap: break-word;
+}
+.message .recived-msg{
+    width: max-content;
+    max-width: 50%;
+    height: max-content;
+    margin-top: 20px;
+    margin-bottom: 30px;
+    border-radius: 20px;
+    padding: 10px 25px;
+    background-color: rgb(107 105 105);
+    color: white;
+    overflow-wrap: break-word;
+}
+.online{
+    height: 70px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background-color: rgb(89 98 149);
+}
+.online ul{
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+}
+.online ul li{
+    display: inline-block;
+    background-color: rgb(5, 180, 78);
+    border: 2px solid gray;
+    color: white;
+    padding: 10px;
+    border-radius: 20px;
+}
+.exit{
+    position: absolute;
+    right: 15px;
+    top:0;
+    background-color: rgb(182, 17, 17);
+    color: white;
+    padding: 8px;
+    border: none;
+    outline: none;
+    border-radius: 15px;
+
+}
+@media screen and (max-width:560px) {
+
+    body{
+        align-items: unset;
+    }
+    .container{
+        height: 100vh;
+        border-radius:unset;
+    }
+    .content .input{
+        bottom: -130px;
+    }
+    .content input{
+        width: 75%;
+    }
+    .message{
+        height: 80vh;
+    }
+}
