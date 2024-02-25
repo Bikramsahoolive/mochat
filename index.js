@@ -8,13 +8,6 @@ app.use(express.static('./public'));
 let PORT = process.env.PORT||3000;
 
 
-// const io= require('socket.io')(3500,{       //{Server}
-//     cors:{
-//         origin:'*'
-//     }
-// });
-
-
 server = createServer(app);
 const io = new Server(server)
 
