@@ -1,10 +1,8 @@
 const express = require('express');
-require('dotenv').config();
-
-const{Server}= require('socket.io')
+const{Server}= require('socket.io');
 const {createServer} = require('http');
 
-const app = express()
+const app = express();
 
 app.use(express.static('./public'));
 let PORT = process.env.PORT||3000;
@@ -56,5 +54,5 @@ app.get('/',function(req,res){
 
 
 server.listen(PORT,()=>{
-    console.log(``);
+    console.log(`running on port : ${PORT} `);
 })
