@@ -1,10 +1,11 @@
 const express = require('express');
 const{Server}= require('socket.io');
 const {createServer} = require('http');
+const path = require('path');
 
 const app = express();
 
-// app.use(express.static('./view'));
+app.use(express.static(path.join(__dirname,'view')));
 let PORT = process.env.PORT||3000;
 
 
@@ -41,8 +42,7 @@ io.on("connection", (socket) => {
 
 
 app.get('/',function(req,res){
-    // res.render('./index.html');
-    res.send({status:"Server working fine."});
+    res.render('/index.html');
 })
 
 
