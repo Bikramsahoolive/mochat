@@ -4,7 +4,7 @@ const {createServer} = require('http');
 
 const app = express();
 
-app.use(express.static('./view'));
+// app.use(express.static('./view'));
 let PORT = process.env.PORT||3000;
 
 
@@ -41,7 +41,8 @@ io.on("connection", (socket) => {
 
 
 app.get('/',function(req,res){
-    res.render('./index.html');
+    // res.render('./index.html');
+    res.send({status:"Server working fine."});
 })
 
 
