@@ -12,15 +12,15 @@ let PORT = process.env.PORT||3000;
 server = createServer(app);
 const io = new Server(server)
 
-io.on("connection", (socket) => {
+io.of('/chat').on("connection", (socket) => {
     // console.log(socket.id);
     socket.on('join', (username) => {
-        // console.log(`join${username}`);
+        console.log(`join : ${username}`);
         socket.username = username;
         io.emit('userJoined', getUserList());
     });
     socket.on('disconnect', () => {
-        // console.log('User disconnected');
+        console.log('User disconnected');
         io.emit('userLeft', getUserList());
     });
 
@@ -28,10 +28,12 @@ io.on("connection", (socket) => {
         const userList = [];
        
         io.sockets.sockets.forEach((connectedSocket) => {
+            console.log(connectedSocket);
             if (connectedSocket.username) {
                 userList.push(connectedSocket.username);
             }
         });
+        console.log(userList);
         return userList;
     }
     //////////////////////////////////////////
