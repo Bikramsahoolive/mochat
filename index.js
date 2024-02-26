@@ -1,18 +1,20 @@
 const express = require('express');
 const{Server}= require('socket.io');
 const {createServer} = require('http');
-const path = require('path');
+// const path = require('path');
 
 const app = express();
 
-app.use(express.static(path.join(__dirname,'public')));
+// app.use(express.static(path.join(__dirname,'public')));
 let PORT = process.env.PORT||3000;
 
 
 server = createServer(app);
-const io = new Server(server)
+const io = new Server(server,{
+    cors:{origin:"*"}
+})
 
-io.of('/chat').on("connection", (socket) => {
+io.on("connection", (socket) => {
     // console.log(socket.id);
     socket.on('join', (username) => {
         console.log(`join : ${username}`);
@@ -43,9 +45,9 @@ io.of('/chat').on("connection", (socket) => {
   });
 
 
-app.get('/',(req,res)=>{
-    res.sendFile(path.join(__dirname,'public','/index.html'));
-})
+// app.get('/',(req,res)=>{
+//     res.sendFile(path.join(__dirname,'public','/index.html'));
+// })
 
 
 
