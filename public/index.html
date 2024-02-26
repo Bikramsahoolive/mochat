@@ -6,7 +6,7 @@
     <title>Mo Chat</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.min.js" integrity="sha512-skuhu6jj+sQnhLq1Txsack8VfnIrX8wL+MTFilYlFFT/NuLJm7eya7zOROs39Jy5cjASMEWqxLzijRVmKhsqWQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.min.js" integrity="sha512-skuhu6jj+sQnhLq1Txsack8VfnIrX8wL+MTFilYlFFT/NuLJm7eya7zOROs39Jy5cjASMEWqxLzijRVmKhsqWQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
 </head>
 <body>
     <div class="container">
@@ -30,6 +30,7 @@
         <div class="input-group mb-3">
             <input type="text" class="" placeholder="Type a Message..." id="msg" autofocus>
             <i class="fa-solid fa-paper-plane" id="send"></i>
+            <input type="file" id="file">
         </div>   
      </div>
     
@@ -38,7 +39,7 @@
 
     </div>
 
-    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <script src="/socket.io/socket.io.js"></script>
     <!-- <script src=" https://cdn.jsdelivr.net/npm/socket.io-client@4.7.4/dist/socket.io.min.js"></script> -->
 
     <script>
@@ -65,7 +66,7 @@
             
         }else{
             localStorage.setItem("name",clientName);
-            let socket = io('ws://localhost:3000');
+            let socket = io();
         socket.on('connect', () => {
             ////////////////////////
         socket.emit('join', clientName);
@@ -97,52 +98,119 @@
          
          // server response;
          socket.on('server-msg',msg=>{
-
-            let showMsg = document.getElementById('message');
-            let h3 = document.createElement('h3');
+            if (msg.msg){
+                let showMsg = document.getElementById('message');
+            let h4 = document.createElement('h4');
             let p =document.createElement('p');
             p.classList.add('recived-msg')
             p.innerText= msg.msg;
-            h3.innerHTML = msg.name;
+            h4.innerHTML = msg.name;
             let incommingDiv = document.createElement('div');
             let msgRcv = document.createElement('div');
             incommingDiv.classList.add('incomming');
             msgRcv.classList.add('msg-rcv');
-            msgRcv.appendChild(h3);
+            msgRcv.appendChild(h4);
             msgRcv.appendChild(p);
             incommingDiv.appendChild(msgRcv);
             showMsg.appendChild(incommingDiv);
+            scrollDown();
+            }
+            else if(msg.file){
+                let showMsg = document.getElementById('message');
+                    let h4 = document.createElement('h4');
+            let img =document.createElement('img');
+            // p.classList.add('send-msg')
+            // p.innerText= message.value;
+            img.src=msg.file;
+            h4.innerHTML=msg.name;
+            let outgoingDiv = document.createElement('div');
+            let msgSend = document.createElement('div');
+            outgoingDiv.classList.add('incomming');
+            msgSend.classList.add('msg-rcv');
+            msgSend.appendChild(h4);
+            msgSend.appendChild(img);
+            showMsg.appendChild(outgoingDiv);
+            outgoingDiv.appendChild(msgSend);
+            scrollDown();
+            }
+            
 
         })
 
         let sendBtn = document.getElementById('send');
-
-        sendBtn.addEventListener('click',()=>{
+        let file=document.getElementById('file');
+        file.addEventListener('change',sendFile);
+        sendBtn.addEventListener('click',sendData);
+        document.getElementById('msg').addEventListener('keydown',(e)=>{
+            if(e.key=='Enter'){
+                sendData();
+            }
+        })
+        
+        function sendData(){
            
             let message = document.getElementById('msg');
 
             let showMsg = document.getElementById('message');
-            showMsg.scrollTo(0,showMsg.scrollHeight-300)
-            let h3 = document.createElement('h3');
+            let h4 = document.createElement('h4');
             let p =document.createElement('p');
             p.classList.add('send-msg')
             p.innerText= message.value;
-            h3.innerHTML=clientName;
+            h4.innerHTML=clientName;
             let outgoingDiv = document.createElement('div');
             let msgSend = document.createElement('div');
             outgoingDiv.classList.add('outgoing');
             msgSend.classList.add('msg-sent');
-            msgSend.appendChild(h3);
+            msgSend.appendChild(h4);
             msgSend.appendChild(p);
             showMsg.appendChild(outgoingDiv);
             outgoingDiv.appendChild(msgSend);
             // send to the server;
             socket.emit('userMsg',{name:clientName,msg:message.value});
                  message.value = "";
-        })
+                 scrollDown();
+        }
+        function sendFile(){
+            
+        
+            let reader = new FileReader();
+            if(file.files[0]){
+                reader.addEventListener('load',(e)=>{
+                    let dataURL = e.target.result;
+                    let showMsg = document.getElementById('message');
+                    let h4 = document.createElement('h4');
+            let img =document.createElement('img');
+            // p.classList.add('send-msg')
+            // p.innerText= message.value;
+            img.src=dataURL;
+            h4.innerHTML=clientName;
+            let outgoingDiv = document.createElement('div');
+            let msgSend = document.createElement('div');
+            outgoingDiv.classList.add('outgoing');
+            msgSend.classList.add('msg-sent');
+            msgSend.appendChild(h4);
+            msgSend.appendChild(img);
+            showMsg.appendChild(outgoingDiv);
+            outgoingDiv.appendChild(msgSend);
+            // send to the server;
+            socket.emit('userMsg',{name:clientName,file:dataURL});
+                 file.value='';
+                 scrollDown()
+                })
+                reader.readAsDataURL(file.files[0]);
+            }
+        }
 
         }
-       
+
+        function scrollDown(){
+            let messageArea = document.getElementById('message');
+            messageArea.scrollTop = messageArea.scrollHeight;
+        }
+    //    let fileDownload = document.querySelector('img');
+    //    fileDownload?.addEventListener('click',()=>{
+    //     console.log('Photo Downloaded.');
+    //    })
     </script>
 </body>
 </html>
