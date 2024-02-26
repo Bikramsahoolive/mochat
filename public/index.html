@@ -20,8 +20,6 @@
             <div class="online"><ul class="user-list" id="userList">
             </ul></div>
     <div id="message" class="message">
-        <!-- <div class="outgoing"> <p class="send-msg">hi</p></div>
-       <div class="incomming"><p class="recived-msg">hlo</p></div> -->
         
     </div>
 
@@ -40,8 +38,8 @@
 
     </div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    
+    <!-- <script src="/socket.io/socket.io.js"></script> -->
+    <script src=" https://cdn.jsdelivr.net/npm/socket.io-client@4.7.4/dist/socket.io.min.js"></script>
 
     <script>
         function leaveChat(){
@@ -102,13 +100,18 @@
          socket.on('server-msg',msg=>{
 
             let showMsg = document.getElementById('message');
+            let h3 = document.createElement('h3');
             let p =document.createElement('p');
             p.classList.add('recived-msg')
-            p.innerText=`${msg.name} : ${msg.msg}`;
+            p.innerText= msg.msg;
+            h3.innerHTML = msg.name;
             let incommingDiv = document.createElement('div');
+            let msgRcv = document.createElement('div');
             incommingDiv.classList.add('incomming');
-
-            incommingDiv.appendChild(p);
+            msgRcv.classList.add('msg-rcv');
+            msgRcv.appendChild(h3);
+            msgRcv.appendChild(p);
+            incommingDiv.appendChild(msgRcv);
             showMsg.appendChild(incommingDiv);
 
         })
@@ -121,15 +124,19 @@
 
             let showMsg = document.getElementById('message');
             showMsg.scrollTo(0,showMsg.scrollHeight-300)
-            
+            let h3 = document.createElement('h3');
             let p =document.createElement('p');
             p.classList.add('send-msg')
-            p.innerText=`${clientName} : ${message.value}`;
+            p.innerText= message.value;
+            h3.innerHTML=clientName;
             let outgoingDiv = document.createElement('div');
+            let msgSend = document.createElement('div');
             outgoingDiv.classList.add('outgoing');
-
-            outgoingDiv.appendChild(p);
+            msgSend.classList.add('msg-sent');
+            msgSend.appendChild(h3);
+            msgSend.appendChild(p);
             showMsg.appendChild(outgoingDiv);
+            outgoingDiv.appendChild(msgSend);
             // send to the server;
             socket.emit('userMsg',{name:clientName,msg:message.value});
                  message.value = "";
