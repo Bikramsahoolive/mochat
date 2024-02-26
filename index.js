@@ -42,7 +42,7 @@ io.on("connection", (socket) => {
 
 
 app.get('/',function(req,res){
-    res.render('/index.html');
+    res.sendFile(path.join(__dirname,'public','index.html'));
 })
 
 
